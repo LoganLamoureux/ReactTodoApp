@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "todohookse4df3d8a": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

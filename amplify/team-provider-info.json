@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-todohooks-dev-104001-authRole",
+      "UnauthRoleArn": "arn:aws:iam::100743387531:role/amplify-todohooks-dev-104001-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::100743387531:role/amplify-todohooks-dev-104001-authRole",
+      "Region": "ca-central-1",
+      "DeploymentBucketName": "amplify-todohooks-dev-104001-deployment",
+      "UnauthRoleName": "amplify-todohooks-dev-104001-unauthRole",
+      "StackName": "amplify-todohooks-dev-104001",
+      "StackId": "arn:aws:cloudformation:ca-central-1:100743387531:stack/amplify-todohooks-dev-104001/23120ec0-03fc-11eb-8b39-0eab779fa6d6",
+      "AmplifyAppId": "d5sqjzto6unr9"
+    },
+    "categories": {
+      "auth": {
+        "todohookse4df3d8a": {}
+      }
+    }
+  }
+}
