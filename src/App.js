@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 //import Todos from './components/Todos';
 import { useState } from 'react';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 
 function Todo({ todo, index, completeTodo, removeTodo }) {
   return(
@@ -81,9 +80,8 @@ function App() {
         ))}
         <TodoForm addTodo={addTodo} />
       </div>
-      <AmplifySignOut />
     </div>
   );
 }
 
-export default withAuthenticator(App);
+export default App;
