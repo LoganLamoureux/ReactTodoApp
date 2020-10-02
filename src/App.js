@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 //import Todos from './components/Todos';
 import { useState, useEffect } from 'react';
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listTodos } from './graphql/queries';
 import { createTodo as createTodoMutation, deleteTodo as deleteTodoMutation } from './graphql/mutations';
@@ -102,12 +102,24 @@ function App() {
 
   async function fetchTodos() {
     const apiData = await API.graphql({ query: listTodos });
+    const todosFromAPI = apiData.data.listTodos.items;
+    await Promise.all(todosFromAPI.map(async todo => {
+      if (todo.image) {
+        const image = await Storage.get(todo.image);
+        todo.image = image;
+      }
+      return todo;
+    }))
     setTodos(apiData.data.listTodos.items);
   }
 
   async function createTodo() {
     if (!formData.name || !formData.description) return;
     await API.graphql({ query: createTodoMutation, variables: { input: formData } });
+    if (formData.image) {
+      const image = await Storage.get(formData.image);
+      formData.image = image;
+    }
     setTodos([...todos, formData ]);
     setFormData(initialFormState);
   }
@@ -116,6 +128,14 @@ function App() {
     const newTodosArray = todos.filter(todo => todo.id !== id);
     setTodos(newTodosArray);
     await API.graphql({ query: deleteTodoMutation, variables: { input: { id } }});
+  }
+
+  async function onChange(e) {
+    if (!e.target.files[0]) return
+    const file = e.target.files[0];
+    setFormData({ ...formData, image: file.name });
+    await Storage.put(file.name, file);
+    fetchTodos();
   }
 
   return (
@@ -132,6 +152,11 @@ function App() {
         placeholder="Todo description"
         value={formData.description}
       />
+
+      <input
+        type="file"
+        onChange={onChange}
+      />
       
       <button onClick={createTodo}>Create Todo</button>
       <div style={{marginBottom: 30}}>
@@ -141,6 +166,9 @@ function App() {
               <h2>{todo.name}</h2>
               <p>{todo.description}</p>
               <button onClick={() => deleteTodo(todo)}>Delete Todo</button>
+              {
+                todo.image && <img src={todo.image} style={{width: 400}} />
+              }
             </div>
           ))
         }
